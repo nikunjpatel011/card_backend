@@ -1,0 +1,6 @@
+node_modules/
+.env
+uploads/
+data/*.json
+data/tesseract-cache/
+npm-debug.log*
