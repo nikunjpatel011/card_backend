@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check app.js && node --check controllers/uploadController.js && node --check controllers/statusController.js && node --check controllers/resultsController.js && node --check queue/queueManager.js && node --check services/ocrService.js && node --check services/parserService.js && node --check services/sheetService.js"
+    "check": "node --check server.js && node --check app.js && node --check controllers/uploadController.js && node --check controllers/statusController.js && node --check controllers/resultsController.js && node --check queue/queueManager.js && node --check models/CardResult.js && node --check utils/database.js && node --check utils/resultStore.js && node --check services/ocrService.js && node --check services/parserService.js && node --check services/sheetService.js"
   },
   "keywords": [
     "business-card",
@@ -21,6 +21,7 @@
     "express": "^4.21.2",
     "form-data": "^4.0.5",
     "googleapis": "^171.4.0",
+    "mongoose": "^9.6.1",
     "multer": "^2.1.1",
     "sharp": "^0.33.5"
   },

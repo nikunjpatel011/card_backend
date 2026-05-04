@@ -1,9 +1,12 @@
 const app = require('./app');
 const config = require('./config');
 const usageStore = require('./utils/usageStore');
+const { connectDatabase } = require('./utils/database');
 const { ensureDir } = require('./utils/fileUtils');
 
 async function startServer() {
+  await connectDatabase();
+
   await Promise.all([
     ensureDir(config.upload.dir),
     ensureDir(config.upload.optimizedDir),

@@ -1,6 +1,6 @@
 # Business Card Scanner Backend
 
-Backend for processing business card images with Express, Multer, Google Vision OCR, rule-based parsing, and verified Google Sheets append.
+Backend for processing business card images with Express, Multer, Gemini OCR/parsing, MongoDB result storage, and verified Google Sheets append.
 
 ## Setup
 
@@ -11,7 +11,14 @@ cp .env.example .env
 npm run dev
 ```
 
-For Google Vision OCR, enable the Cloud Vision API and set either `GOOGLE_VISION_API_KEY` or one service-account credential option in `.env`.
+Set MongoDB connection details in `.env`:
+
+```env
+MONGODB_URI=mongodb+srv://...
+MONGODB_DB_NAME=scan-card
+```
+
+For OCR/parsing, set `GEMINI_API_KEY` in `.env`.
 
 For Google Sheets, create a Google Cloud service account, enable the Google Sheets API, share the target spreadsheet with the service account email, then set `GOOGLE_SHEET_ID` and one credential option in `.env`.
 
@@ -67,7 +74,7 @@ Returns one job status: `pending`, `processing`, `completed`, or `failed`.
 
 ### `GET /results`
 
-Returns completed extracted records.
+Returns completed extracted records from MongoDB.
 
 ### `GET /results?jobId=<id>`
 
@@ -98,5 +105,5 @@ The backend reserves quota when uploads are accepted and completes quota after a
 - OCR uses Gemini Vision by default for multilingual card text.
 - Processing is intentionally one card at a time for stability.
 - Uploaded files are deleted after processing.
-- OCR results are appended to Google Sheets automatically when processing completes, then saved to local result storage.
-- Tesseract trained data is only needed for the local fallback. For offline use, place traineddata files locally and set `TESSDATA_PATH`.
+- OCR results are appended to Google Sheets automatically when processing completes, then saved to MongoDB.
+- Card result data is not written to `backend/data/results.json`.

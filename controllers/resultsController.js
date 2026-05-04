@@ -13,7 +13,7 @@ function stripRawText(record, includeRawText) {
 }
 
 async function getResults(req, res) {
-  const { jobId } = req.query;
+  const { jobId, limit, skip } = req.query;
   const includeRawText = req.query.includeRawText === 'true';
 
   if (jobId) {
@@ -43,7 +43,34 @@ async function getResults(req, res) {
     return;
   }
 
-  const results = await resultStore.listResults();
+  const options = {
+    limit: limit ? parseInt(limit, 10) : 100,
+    skip: skip ? parseInt(skip, 10) : 0
+  };
+
+  const results = await resultStore.listResults(options);
+
+  res.json({
+    success: true,
+    count: results.length,
+    results: results.map((result) => stripRawText(result, includeRawText))
+  });
+}
+
+async function getResultsStats(req, res) {
+  const stats = await resultStore.getStats();
+
+  res.json({
+    success: true,
+    stats
+  });
+}
+
+async function getRecentResults(req, res) {
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+  const includeRawText = req.query.includeRawText === 'true';
+
+  const results = await resultStore.getRecentResults(limit);
 
   res.json({
     success: true,
@@ -122,5 +149,7 @@ async function saveResult(req, res) {
 
 module.exports = {
   getResults,
-  saveResult
+  saveResult,
+  getResultsStats,
+  getRecentResults
 };

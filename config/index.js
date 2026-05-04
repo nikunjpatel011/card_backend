@@ -44,6 +44,16 @@ module.exports = {
       .map((origin) => origin.trim())
       .filter(Boolean)
   },
+  auth: {
+    enabled: readBoolean('AUTH_ENABLED', true),
+    username: process.env.AUTH_USERNAME || 'nimkro',
+    password: process.env.AUTH_PASSWORD || 'nimkro@123',
+    sessionSecret: process.env.SESSION_SECRET || 'nimkro-secret-key-change-in-production'
+  },
+  mongodb: {
+    uri: process.env.MONGODB_URI || '',
+    dbName: process.env.MONGODB_DB_NAME || ''
+  },
   upload: {
     dir: uploadDir,
     optimizedDir: path.join(uploadDir, 'optimized'),
@@ -75,7 +85,6 @@ module.exports = {
   },
   google: googleConfig,
   data: {
-    usageFile: path.join(rootDir, 'data', 'usage.json'),
-    resultsFile: path.join(rootDir, 'data', 'results.json')
+    usageFile: path.join(rootDir, 'data', 'usage.json')
   }
 };
