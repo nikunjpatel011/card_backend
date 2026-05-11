@@ -262,4 +262,9 @@ async function parseBusinessCard(rawText) {
   return cleaned;
 }
 
-module.exports = { parseBusinessCard };
+module.exports = {
+  GEMINI_RESPONSE_SCHEMA,
+  parseBusinessCard,
+  parseGeminiJson,
+  normalizeBusinessCardData: validateAndClean
+};

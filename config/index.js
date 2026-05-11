@@ -65,6 +65,7 @@ module.exports = {
   ocr: {
     ocrSpaceApiKey: process.env.OCR_SPACE_API_KEY || '',
     useGeminiVision: readBoolean('OCR_USE_GEMINI_VISION', true),
+    useFastExtraction: readBoolean('OCR_USE_FAST_EXTRACTION', true),
     fallbackToOcrSpace: readBoolean('OCR_FALLBACK_TO_OCR_SPACE', false),
     maxImageWidth:  readNumber('OCR_MAX_IMAGE_WIDTH', 1800),
     jpegQuality:    Math.min(readNumber('OCR_JPEG_QUALITY', 82), 100),

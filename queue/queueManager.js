@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 const ocrService = require('../services/ocrService');
-const parserService = require('../services/parserService');
 const sheetService = require('../services/sheetService');
 const usageStore = require('../utils/usageStore');
 const resultStore = require('../utils/resultStore');
@@ -87,9 +86,11 @@ async function processJob(job) {
   job.updatedAt = now();
 
   try {
-    const rawText = await ocrService.recognizeCard(job.files);
-    const result  = await parserService.parseBusinessCard(rawText);  // async (Gemini)
+    const extractStartedAt = Date.now();
+    const { rawText, result } = await ocrService.extractBusinessCard(job.files);
+    const extractedAt = Date.now();
     const sheet = await sheetService.appendCard(result);
+    const sheetSavedAt = Date.now();
     const savedAt = now();
 
     job.status = 'completed';
@@ -111,6 +112,11 @@ async function processJob(job) {
       savedAt
     });
     await usageStore.completeReservation();
+    const persistedAt = Date.now();
+    console.log(
+      `Job ${job.id} completed in ${persistedAt - extractStartedAt}ms ` +
+      `(extract ${extractedAt - extractStartedAt}ms, sheet ${sheetSavedAt - extractedAt}ms, persist ${persistedAt - sheetSavedAt}ms).`
+    );
   } catch (error) {
     await markFailed(job, error);
   } finally {
